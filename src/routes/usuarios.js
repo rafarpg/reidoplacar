@@ -48,7 +48,6 @@ router.put('/me', async (req, res, next) => {
   }
 });
 
-// Apaga a conta (ligas do usuário, participações e palpites saem por ON DELETE CASCADE)
 router.delete('/me', async (req, res, next) => {
   try {
     const { senha } = req.body;

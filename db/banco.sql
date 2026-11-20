@@ -1,14 +1,3 @@
--- ReiDoPlacar: banco completo (estrutura + dados iniciais)
---
--- Como usar: crie um banco vazio, selecione-o e importe este arquivo.
---   Local (XAMPP/MySQL): banco "reidoplacar".
---   Railway: o banco já existe e se chama "railway".
--- Por isso não há CREATE DATABASE/USE aqui.
---
--- ATENÇÃO: apaga as tabelas existentes (DROP TABLE). Importar de novo zera tudo.
---
--- Requer MySQL 8.0.16+ ou MariaDB 10.4+ (por causa dos CHECK).
-
 SET NAMES utf8mb4;
 
 DROP TABLE IF EXISTS palpites, partidas, rodadas, liga_membros, ligas, times, usuarios;
@@ -88,7 +77,6 @@ CREATE TABLE palpites (
   CONSTRAINT fk_palpites_partida FOREIGN KEY (partida_id) REFERENCES partidas(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dados iniciais: os 8 times (os 8 primeiros da Série A 2026, em 18/11/2026)
 INSERT INTO times (nome, sigla) VALUES
   ('Flamengo','FLA'), ('Palmeiras','PAL'), ('Cruzeiro','CRU'), ('Fluminense','FLU'),
   ('Athletico-PR','CAP'), ('Bahia','BAH'), ('Atlético-MG','CAM'), ('Santos','SAN');

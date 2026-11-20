@@ -1,4 +1,3 @@
-// Cabeçalho da área logada (logo, nome, Perfil, Sair). Precisa de sessao.js antes.
 (function () {
   const usuario = sessao.usuario();
   const h = document.createElement('header');
@@ -15,7 +14,6 @@
   const nome = document.createElement('a');
   nome.href = '/perfil.html';
   nome.className = 'btn-usuario';
-  // ícone de usuário (cabeça + ombros)
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('viewBox', '0 0 24 24');
   svg.setAttribute('width', '18');

@@ -12,7 +12,6 @@ const pool = mysql.createPool({
   dateStrings: true,
 });
 
-// Roda fn(conn) dentro de uma transação (commit se der certo, rollback se der erro)
 async function transacao(fn) {
   const conn = await pool.getConnection();
   try {

@@ -26,7 +26,6 @@ router.post('/cadastro', async (req, res, next) => {
     const usuario = { id: r.insertId, nome: nome.trim(), email };
     res.status(201).json({ token: gerarToken(usuario), usuario });
   } catch (e) {
-    // e-mail repetido em cadastros simultâneos (chave única)
     if (e.code === 'ER_DUP_ENTRY') return res.status(409).json({ erro: 'E-mail já cadastrado' });
     next(e);
   }

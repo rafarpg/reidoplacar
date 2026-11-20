@@ -9,7 +9,6 @@ const { montarRodada } = require('../rodadaDados');
 const router = express.Router();
 router.use(autenticar);
 
-// Para rotas /rodadas/:id: carrega a rodada e deixa o exigirMembro checar a liga dela
 router.use('/:id', async (req, res, next) => {
   try {
     const [r] = await pool.query('SELECT * FROM rodadas WHERE id = ?', [req.params.id]);
@@ -26,7 +25,6 @@ router.get('/:id', async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// Rota leve, consultada a cada 3 s
 router.get('/:id/status', async (req, res, next) => {
   try {
     const [r] = await pool.query('SELECT id, numero, status FROM rodadas WHERE id = ?', [req.rodada.id]);
@@ -34,7 +32,7 @@ router.get('/:id/status', async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-const MAX_GOLS = 2147483647; // limite do INT UNSIGNED usado no banco (com folga)
+const MAX_GOLS = 2147483647;
 const golsValido = (g) => Number.isInteger(g) && g >= 0;
 
 router.put('/:id/palpites', async (req, res, next) => {
@@ -52,7 +50,6 @@ router.put('/:id/palpites', async (req, res, next) => {
     }
 
     const salvos = await transacao(async (conn) => {
-      // trava a linha da rodada: um "iniciar" simultâneo espera este commit
       const [r] = await conn.query('SELECT status FROM rodadas WHERE id = ? FOR UPDATE', [req.rodada.id]);
       if (r[0].status !== 'aberta') throw erroHttp(409, 'Palpites encerrados');
 
@@ -75,8 +72,6 @@ router.put('/:id/palpites', async (req, res, next) => {
 
 router.post('/:id/iniciar', exigirDono, async (req, res, next) => {
   try {
-    // FOR UPDATE antes do UPDATE: espera os salvamentos em curso, assim o NOW() de
-    // iniciada_em é lido depois deles (todo palpite aceito fica com atualizado_em <= iniciada_em)
     await transacao(async (conn) => {
       const [r] = await conn.query('SELECT status FROM rodadas WHERE id = ? FOR UPDATE', [req.rodada.id]);
       if (r[0].status !== 'aberta') throw erroHttp(409, 'A rodada não está aberta');
@@ -86,7 +81,6 @@ router.post('/:id/iniciar', exigirDono, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// Sorteia os placares, pontua os palpites, finaliza a rodada e abre a próxima
 router.post('/:id/resultados', exigirDono, async (req, res, next) => {
   try {
     const resposta = await transacao(async (conn) => {

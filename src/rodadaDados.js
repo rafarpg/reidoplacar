@@ -1,6 +1,5 @@
 const { pool } = require('./db');
 
-// Monta a resposta de "rodada atual" (SPECS 5.5) para uma rodada qualquer.
 async function montarRodada(rodada, usuarioId) {
   const [partidas] = await pool.query(
     `SELECT pa.id, pa.gols_casa, pa.gols_fora,
@@ -15,7 +14,6 @@ async function montarRodada(rodada, usuarioId) {
 
   const [part] = await pool.query(
     'SELECT COUNT(*) AS n FROM liga_membros WHERE liga_id = ?', [rodada.liga_id]);
-  // membros com palpite em todos os jogos da rodada
   const [jaP] = await pool.query(
     `SELECT COUNT(*) AS n FROM (
        SELECT p.usuario_id FROM palpites p

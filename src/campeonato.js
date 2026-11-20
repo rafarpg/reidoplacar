@@ -1,4 +1,3 @@
-// Método do círculo: 8 times, 7 rodadas de 4 jogos, todos contra todos uma vez.
 function gerarTabela(timeIds) {
   const t = [...timeIds].sort(() => Math.random() - 0.5);
   const rodadas = [];
@@ -12,7 +11,7 @@ function gerarTabela(timeIds) {
       jogos.push({ casa, fora });
     }
     rodadas.push(jogos);
-    t.splice(1, 0, t.pop()); // gira todos menos o primeiro
+    t.splice(1, 0, t.pop());
   }
   return rodadas;
 }

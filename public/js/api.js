@@ -1,4 +1,3 @@
-// fetch com token. Em erro, lança Error com a mensagem do servidor. Em 401, volta ao login.
 const api = {
   async chamar(metodo, caminho, corpo) {
     const opcoes = { method: metodo, headers: {} };

@@ -21,7 +21,7 @@ campo('form').addEventListener('submit', async (e) => {
   }
   try {
     const r = await api.put('/usuarios/me', corpo);
-    sessao.salvar(sessao.token(), r.usuario); // nome novo no cabeçalho na próxima página
+    sessao.salvar(sessao.token(), r.usuario);
     campo('senhaAtual').value = '';
     campo('novaSenha').value = '';
     campo('ok').textContent = 'Perfil salvo';

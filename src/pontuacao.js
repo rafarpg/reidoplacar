@@ -1,4 +1,3 @@
-// 10 = placar exato | 7 = vencedor/empate + gols de um time | 5 = só o resultado | 2 = gols de um time | 0 = erro
 function calcularPontos(palpCasa, palpFora, resCasa, resFora) {
   if (palpCasa === resCasa && palpFora === resFora) return 10;
   const mesmoResultado = Math.sign(palpCasa - palpFora) === Math.sign(resCasa - resFora);

@@ -9,7 +9,6 @@ const { montarRodada } = require('../rodadaDados');
 const router = express.Router();
 router.use(autenticar);
 
-// Valida {nome, descricao}. Devolve mensagem de erro ou null.
 function validarLiga(nome, descricao) {
   if (typeof nome !== 'string' || nome.trim().length < 2 || nome.trim().length > 100)
     return 'O nome da liga deve ter de 2 a 100 caracteres';
@@ -18,7 +17,6 @@ function validarLiga(nome, descricao) {
   return null;
 }
 
-// Lista de ligas no formato da API. "onde" filtra (ex.: só as minhas).
 async function listarLigas(usuarioId, onde) {
   const [linhas] = await pool.query(
     `SELECT l.id, l.nome, l.descricao, l.status, l.dono_id, u.nome AS dono_nome,
@@ -51,13 +49,11 @@ router.get('/', async (req, res, next) => {
 
 router.get('/minhas', async (req, res, next) => {
   try {
-    // o 2º "?" do listarLigas serve ao filtro das minhas ligas
     res.json(await listarLigas(req.usuario.id,
       'EXISTS(SELECT 1 FROM liga_membros WHERE liga_id = l.id AND usuario_id = ?)'));
   } catch (e) { next(e); }
 });
 
-// Cria a liga e coloca o dono como membro (mesma transação)
 router.post('/', async (req, res, next) => {
   try {
     const { nome, descricao } = req.body;
@@ -104,7 +100,6 @@ router.put('/:id', exigirMembro, exigirDono, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// Exclui a liga (membros, rodadas, partidas e palpites saem por ON DELETE CASCADE)
 router.delete('/:id', exigirMembro, exigirDono, async (req, res, next) => {
   try {
     await pool.query('DELETE FROM ligas WHERE id = ?', [req.liga.id]);
@@ -125,7 +120,6 @@ router.post('/:id/participar', async (req, res, next) => {
   }
 });
 
-// Sair da liga: apaga a participação e os palpites do usuário nessa liga
 router.delete('/:id/participar', exigirMembro, async (req, res, next) => {
   try {
     if (req.liga.dono_id === req.usuario.id)
@@ -142,7 +136,6 @@ router.delete('/:id/participar', exigirMembro, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// Gera as 7 rodadas e 28 partidas. Rodada 1 fica aberta e a liga entra em andamento.
 router.post('/:id/campeonato', exigirMembro, exigirDono, async (req, res, next) => {
   try {
     const rodadas = await transacao(async (conn) => {
@@ -179,7 +172,6 @@ router.get('/:id/rodadas', exigirMembro, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// Rodada aberta ou em andamento (ou a 7ª se a liga encerrou). Liga sem campeonato: { rodada: null }
 router.get('/:id/rodada-atual', exigirMembro, async (req, res, next) => {
   try {
     const [r] = await pool.query(
@@ -191,7 +183,6 @@ router.get('/:id/rodada-atual', exigirMembro, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// Desempate: pontos, mais 10, mais 7, mais 5, quem entrou primeiro
 router.get('/:id/ranking', exigirMembro, async (req, res, next) => {
   try {
     const [linhas] = await pool.query(
@@ -223,7 +214,6 @@ router.get('/:id/ranking', exigirMembro, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// Rodadas finalizadas e a atual, com meu palpite, resultado e pontos
 router.get('/:id/meus-palpites', exigirMembro, async (req, res, next) => {
   try {
     const [linhas] = await pool.query(

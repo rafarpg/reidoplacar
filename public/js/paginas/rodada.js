@@ -4,7 +4,6 @@ let rodadaId = null;
 let statusAtual = null;
 let souDono = false;
 
-// Carrega pela rodada atual da liga, ou por uma rodada específica (depois que ela finaliza)
 async function carregarRodada(idEspecifico) {
   const d = idEspecifico ? await api.get('/rodadas/' + idEspecifico) : await api.get('/ligas/' + ligaId + '/rodada-atual');
   if (!d.rodada) {
@@ -51,7 +50,7 @@ function desenhar(d) {
   }
 }
 
-const MAX_GOLS = 2147483647; // mesmo limite do servidor
+const MAX_GOLS = 2147483647;
 
 function mostrarErro(err) {
   el('erro').textContent = err.message === 'Failed to fetch' ? 'Sem conexão' : err.message;
@@ -70,7 +69,7 @@ async function salvar() {
   });
   for (const id in porPartida) {
     const { casa, fora } = porPartida[id];
-    if (casa === '' && fora === '') continue; // jogo sem palpite
+    if (casa === '' && fora === '') continue;
     if (casa === '' || fora === '') { el('erro').textContent = 'Preencha os dois lados de cada jogo (ou deixe os dois vazios)'; return; }
     const gc = Number(casa); const gf = Number(fora);
     if (![gc, gf].every((g) => Number.isInteger(g) && g >= 0)) { el('erro').textContent = 'Os gols devem ser números inteiros a partir de 0'; return; }
@@ -84,7 +83,7 @@ async function salvar() {
   } catch (err) {
     const encerrado = err.message === 'Palpites encerrados';
     el('erro').textContent = encerrado ? 'Não é possível salvar seu palpite, pois a rodada já começou' : err.message;
-    if (encerrado) travou(); // 409: mesmo tratamento da consulta automática
+    if (encerrado) travou();
   }
 }
 
@@ -92,10 +91,10 @@ function travou() {
   document.querySelectorAll('#jogos input').forEach((i) => { i.disabled = true; });
   el('aviso').textContent = 'Não é possível salvar seu palpite, pois a rodada já começou';
   el('aviso').hidden = false;
-  carregarRodada(rodadaId).catch(mostrarErro); // mostra o que ficou salvo de fato
+  carregarRodada(rodadaId).catch(mostrarErro);
 }
 
-let erroDaConsulta = false; // o erro na tela veio da consulta de status?
+let erroDaConsulta = false;
 
 async function verificarStatus() {
   if (document.visibilityState === 'hidden' || !rodadaId) return;

@@ -1,7 +1,5 @@
 const { pool } = require('./db');
 
-// Depois de autenticar. Carrega a liga (de req.ligaId ou :id), 404 se não existe,
-// 403 se o usuário não é membro. Coloca req.liga.
 async function exigirMembro(req, res, next) {
   try {
     const id = req.ligaId || req.params.id;
@@ -17,7 +15,6 @@ async function exigirMembro(req, res, next) {
   }
 }
 
-// Depois de exigirMembro. 403 se não é o dono.
 function exigirDono(req, res, next) {
   if (req.liga.dono_id !== req.usuario.id)
     return res.status(403).json({ erro: 'Só o dono da liga pode fazer isso' });

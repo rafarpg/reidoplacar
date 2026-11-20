@@ -5,7 +5,7 @@ const { autenticar } = require('./autenticar');
 
 const app = express();
 app.use(express.json());
-app.use((req, res, next) => { req.body = req.body || {}; next(); }); // Express 5: sem corpo, req.body é undefined
+app.use((req, res, next) => { req.body = req.body || {}; next(); });
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.use('/api/auth', require('./routes/auth'));
@@ -29,7 +29,6 @@ app.get('/api/saude', async (req, res) => {
   }
 });
 
-// Erros inesperados: loga no console e responde 500 genérico
 app.use((err, req, res, next) => {
   if (err.type === 'entity.parse.failed') return res.status(400).json({ erro: 'Dados inválidos' });
   if (err.status) return res.status(err.status).json({ erro: err.message });

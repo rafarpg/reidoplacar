@@ -1,4 +1,3 @@
-// Guarda o token e o usuário no localStorage
 const sessao = {
   salvar(token, usuario) {
     localStorage.setItem('token', token);
@@ -12,7 +11,6 @@ const sessao = {
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
   },
-  // Páginas da área logada chamam isto no começo
   exigirLogin() {
     if (!sessao.token()) location.href = '/index.html';
   },
