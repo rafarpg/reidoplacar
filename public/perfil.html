@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReiDoPlacar - Perfil</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><main>
+  <div class="cartao">
+    <h1>Meu perfil</h1>
+    <form id="form">
+      <label for="nome">Nome</label><input id="nome" required minlength="2" maxlength="100">
+      <label for="email">E-mail</label><input id="email" type="email" required>
+      <h2 style="margin-top:20px">Trocar senha (opcional)</h2>
+      <label for="senhaAtual">Senha atual</label><input id="senhaAtual" type="password">
+      <label for="novaSenha">Nova senha (mínimo 6 caracteres)</label><input id="novaSenha" type="password">
+      <button class="botao" type="submit">Salvar</button>
+      <p class="erro" id="erro"></p><p class="ok" id="ok"></p>
+    </form>
+  </div>
+  <div class="cartao">
+    <h2>Excluir conta</h2>
+    <p>Isso apaga sua conta, as ligas que você criou (com tudo dentro), suas participações e seus palpites. Não dá para desfazer.</p>
+    <form id="form-excluir">
+      <label for="senhaExcluir">Digite sua senha para confirmar</label><input id="senhaExcluir" type="password" required>
+      <button class="botao perigo" type="submit">Excluir minha conta</button>
+      <p class="erro" id="erro-excluir"></p>
+    </form>
+  </div>
+</main>
+<script src="/js/sessao.js"></script><script>sessao.exigirLogin();</script><script src="/js/api.js"></script><script src="/js/header.js"></script><script src="/js/paginas/perfil.js"></script>
+</body></html>
